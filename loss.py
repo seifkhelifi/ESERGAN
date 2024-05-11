@@ -4,16 +4,18 @@ import config
 
 
 class VGGLoss(nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super().__init__()
-        self.vgg = vgg19(pretrained=True).features[:35].eval().to(config.DEVICE)
+
+        self.vgg = vgg19(pretrained=True).features[:35].eval().to(device)
+        self.loss = nn.MSELoss()
 
         for param in self.vgg.parameters():
             param.requires_grad = False
 
-        self.loss = nn.MSELoss()
-
-    def forward(self, input, target):
-        vgg_input_features = self.vgg(input)
+    def forward(self, output, target):
+        vgg_input_features = self.vgg(output)
         vgg_target_features = self.vgg(target)
-        return self.loss(vgg_input_features, vgg_target_features)
+        loss = self.loss(vgg_input_features, vgg_target_features)
+
+        return loss
