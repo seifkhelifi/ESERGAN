@@ -19,3 +19,19 @@ class VGGLoss(nn.Module):
         loss = self.loss(vgg_input_features, vgg_target_features)
 
         return loss
+    
+    
+class ESRGANLoss(nn.Module):
+    def __init__(self, l1_weight=1e-2, vgg_weight=1, device='cpu'):
+        super().__init__()
+        
+        self.vgg_criterion = VGGLoss(device)
+        self.l1_criterion = nn.L1Loss().to(device)
+        self.l1_weight = l1_weight
+        
+    def forward(self, output, target):
+        vgg_loss = self.vgg_criterion(output, target)
+        l1_loss = self.l1_criterion(output, target)
+        
+        loss = vgg_loss + self.l1_weight * l1_loss
+        return loss

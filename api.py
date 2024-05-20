@@ -24,7 +24,7 @@ app = Flask(__name__)
 def generate_high_res():
     # Loading the model 
     # Define the path to the checkpoint file
-    checkpoint_path = r"C:\Users\dell\Downloads\checkpoint_epoch_622.pth"
+    checkpoint_path = r"C:\Users\dell\Downloads\checkpoint_epoch_830.pth"
 
     # Load the checkpoint
     checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
